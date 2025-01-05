@@ -125,6 +125,7 @@ class TCGADataset(Dataset):
         self.persistence = persistence
         self.keep_same_psize = keep_same_psize
         self.is_train = is_train
+        self.LABEL_TO_INT = {"TCGA-LUAD":0, "TCGA-LUSC":1}
 
         for i,_patient_name in enumerate(self.patient_name):
             _sides = np.array([ _slide if _patient_name in _slide else '0' for _slide in self.all_pts])
@@ -152,12 +153,13 @@ class TCGADataset(Dataset):
         """
         file_path = self.slide_name[idx]
         label = self.slide_label[idx]
+        label_int = self.LABEL_TO_INT[label]
 
         if self.persistence:
             features = file_path
         else:
             features = torch.load(os.path.join(self.root,'pt_files',file_path))
-        return features , int(label)
+        return features , int(label_int)
 
 class C16Dataset(Dataset):
 

@@ -1,0 +1,33 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--project=tcga_lung",
+                "--datasets=tcga",
+                "--tcga_sub=lung",
+                "--dataset_root=/mnt/linux/programmes/itu/semester5/thesis1/CLAM/features",
+                "--model_path=results",
+                "--cv_fold=5",
+                "--model=rrtmil",
+                "--pool=attn",
+                "--n_trans_layers=2",
+                "--da_act=tanh",
+                "--title=lung_r50_rrtmil",
+                "--epeg_k=17",
+                "--crmsa_k=3",
+                "--crmsa_heads=1",
+                "--input_dim=1024",
+                "--seed=2021"
+            ]
+        }
+    ]
+}

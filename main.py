@@ -1,6 +1,6 @@
 import time
 import torch
-import wandb
+# import wandb
 import numpy as np
 import torch.nn as nn
 from dataloader import *
@@ -66,28 +66,28 @@ def main(args):
             print('Start %d-fold cross validation: fold %d ' % (args.cv_fold, k))
         ckc_metric = one_fold(args,k,ckc_metric,train_p, train_l, test_p, test_l,val_p,val_l)
 
-    if args.always_test:
-        if args.wandb:
-            wandb.log({
-                "cross_val/te_auc_mean":np.mean(np.array(te_auc)),
-                "cross_val/te_auc_std":np.std(np.array(te_auc)),
-                "cross_val/te_f1_mean":np.mean(np.array(te_fs)),
-                "cross_val/te_f1_std":np.std(np.array(te_fs)),
-            })
+    # if args.always_test:
+    #     if args.wandb:
+    #         wandb.log({
+    #             "cross_val/te_auc_mean":np.mean(np.array(te_auc)),
+    #             "cross_val/te_auc_std":np.std(np.array(te_auc)),
+    #             "cross_val/te_f1_mean":np.mean(np.array(te_fs)),
+    #             "cross_val/te_f1_std":np.std(np.array(te_fs)),
+    #         })
 
-    if args.wandb:
-        wandb.log({
-            "cross_val/acc_mean":np.mean(np.array(acs)),
-            "cross_val/auc_mean":np.mean(np.array(auc)),
-            "cross_val/f1_mean":np.mean(np.array(fs)),
-            "cross_val/pre_mean":np.mean(np.array(pre)),
-            "cross_val/recall_mean":np.mean(np.array(rec)),
-            "cross_val/acc_std":np.std(np.array(acs)),
-            "cross_val/auc_std":np.std(np.array(auc)),
-            "cross_val/f1_std":np.std(np.array(fs)),
-            "cross_val/pre_std":np.std(np.array(pre)),
-            "cross_val/recall_std":np.std(np.array(rec)),
-        })
+    # if args.wandb:
+        # wandb.log({
+        #     "cross_val/acc_mean":np.mean(np.array(acs)),
+        #     "cross_val/auc_mean":np.mean(np.array(auc)),
+        #     "cross_val/f1_mean":np.mean(np.array(fs)),
+        #     "cross_val/pre_mean":np.mean(np.array(pre)),
+        #     "cross_val/recall_mean":np.mean(np.array(rec)),
+        #     "cross_val/acc_std":np.std(np.array(acs)),
+        #     "cross_val/auc_std":np.std(np.array(auc)),
+        #     "cross_val/f1_std":np.std(np.array(fs)),
+        #     "cross_val/pre_std":np.std(np.array(pre)),
+        #     "cross_val/recall_std":np.std(np.array(rec)),
+        # })
     if not args.no_log:
         print('Cross validation accuracy mean: %.3f, std %.3f ' % (np.mean(np.array(acs)), np.std(np.array(acs))))
         print('Cross validation auc mean: %.3f, std %.3f ' % (np.mean(np.array(auc)), np.std(np.array(auc))))
@@ -296,7 +296,7 @@ def one_fold(args,k,ckc_metric,train_p, train_l, test_p, test_l,val_p,val_l):
                 ])
 
                 rowd = OrderedDict([ (str(k)+'-fold/'+_k,_v) for _k, _v in rowd.items()])
-                wandb.log(rowd,commit=False)
+                # wandb.log(rowd,commit=False)
 
             if _te_auc_value > opt_te_auc:
                 opt_te_auc = _te_auc_value
@@ -307,7 +307,7 @@ def one_fold(args,k,ckc_metric,train_p, train_l, test_p, test_l,val_p,val_l):
                         ("best_te_f1",_te_fscore)
                     ])
                     rowd = OrderedDict([ (str(k)+'-fold/'+_k,_v) for _k, _v in rowd.items()])
-                    wandb.log(rowd,commit=False)
+                    # wandb.log(rowd,commit=False)
             
         if not args.no_log:
             print('\r Epoch [%d/%d] train loss: %.1E, test loss: %.1E, accuracy: %.3f, auc_value:%.3f, precision: %.3f, recall: %.3f, fscore: %.3f , time: %.3f(%.3f)' % 
@@ -325,7 +325,7 @@ def one_fold(args,k,ckc_metric,train_p, train_l, test_p, test_l,val_p,val_l):
             ])
 
             rowd = OrderedDict([ (str(k)+'-fold/'+_k,_v) for _k, _v in rowd.items()])
-            wandb.log(rowd,commit=False)
+            # wandb.log(rowd,commit=False)
 
         if auc_value > opt_auc and epoch >= args.save_best_model_stage*args.num_epoch:
             optimal_ac = accuracy
@@ -353,7 +353,7 @@ def one_fold(args,k,ckc_metric,train_p, train_l, test_p, test_l,val_p,val_l):
             ])
 
             rowd = OrderedDict([ (str(k)+'-fold/'+_k,_v) for _k, _v in rowd.items()])
-            wandb.log(rowd)
+            # wandb.log(rowd)
         
         # save checkpoint
         random_state = {
@@ -373,7 +373,7 @@ def one_fold(args,k,ckc_metric,train_p, train_l, test_p, test_l,val_p,val_l):
             'ckc_metric': [acs,pre,rec,fs,auc,te_auc,te_fs],
             'val_best_metric': [optimal_ac, opt_pre, opt_re, opt_fs, opt_auc,opt_epoch],
             'te_best_metric': [opt_te_auc,opt_te_fs,opt_te_tea_auc,opt_te_tea_fs],
-            'wandb_id': wandb.run.id if args.wandb else '',
+            # 'wandb_id': wandb.run.id if args.wandb else '',
         }
         if not args.no_log:
             torch.save(ckp, os.path.join(args.model_path, 'ckp.pt'))
@@ -389,15 +389,15 @@ def one_fold(args,k,ckc_metric,train_p, train_l, test_p, test_l,val_p,val_l):
 
     accuracy, auc_value, precision, recall, fscore,test_loss_log = test(args,model,test_loader,device,criterion)
     
-    if args.wandb:
-        wandb.log({
-            "test_acc":accuracy,
-            "test_precesion":precision,
-            "test_recall":recall,
-            "test_fscore":fscore,
-            "test_auc":auc_value,
-            "test_loss":test_loss_log,
-        })
+    # if args.wandb:
+    #     wandb.log({
+    #         "test_acc":accuracy,
+    #         "test_precesion":precision,
+    #         "test_recall":recall,
+    #         "test_fscore":fscore,
+    #         "test_auc":auc_value,
+    #         "test_loss":test_loss_log,
+    #     })
     if not args.no_log:
         print('\n Optimal accuracy: %.3f ,Optimal auc: %.3f,Optimal precision: %.3f,Optimal recall: %.3f,Optimal fscore: %.3f' % (optimal_ac,opt_auc,opt_pre,opt_re,opt_fs))
     acs.append(accuracy)
@@ -486,8 +486,8 @@ def train_loop(args,model,loader,optimizer,device,amp_autocast,criterion,loss_sc
             if not args.no_log:
                 print('[{}/{}] logit_loss:{}, cls_loss:{},  patch_num:{}, keep_num:{} '.format(i,len(loader)-1,loss_cls_meter.avg,loss_cl_meter.avg,patch_num_meter.avg, keep_num_meter.avg))
             rowd = OrderedDict([ (str(k)+'-fold/'+_k,_v) for _k, _v in rowd.items()])
-            if args.wandb:
-                wandb.log(rowd)
+            # if args.wandb:
+            #     wandb.log(rowd)
 
         train_loss_log = train_loss_log + train_loss.item()
 
@@ -739,9 +739,9 @@ if __name__ == '__main__':
     if args.wandb:
         if args.auto_resume:
             ckp = torch.load(os.path.join(args.model_path,'ckp.pt'))
-            wandb.init(project=args.project, entity='dearcat',name=args.title,config=args,dir=os.path.join(args.model_path),id=ckp['wandb_id'],resume='must')
-        else:
-            wandb.init(project=args.project, entity='dearcat',name=args.title,config=args,dir=os.path.join(args.model_path))
+        #     wandb.init(project=args.project, entity='dearcat',name=args.title,config=args,dir=os.path.join(args.model_path),id=ckp['wandb_id'],resume='must')
+        # else:
+        #     wandb.init(project=args.project, entity='dearcat',name=args.title,config=args,dir=os.path.join(args.model_path))
         
     print(args)
 
