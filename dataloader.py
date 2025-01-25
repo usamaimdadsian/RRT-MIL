@@ -158,7 +158,7 @@ class TCGADataset(Dataset):
         if self.persistence:
             features = file_path
         else:
-            features = torch.load(os.path.join(self.root,'pt_files',file_path))
+            features = torch.load(os.path.join(self.root,'pt_files',file_path), weights_only=False)
         return features , int(label_int)
 
 class C16Dataset(Dataset):
